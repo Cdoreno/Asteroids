@@ -32,13 +32,13 @@ public abstract class Entidad {
     public void actualizar(Juego game) {
         pos.add(vel);
         if (pos.x < 0.0f) {
-            pos.x += Espacio.WORLD_SIZE;
+            pos.x += Espacio.SIZE_ESPACIO;
         }
         if (pos.y < 0.0f) {
-            pos.y += Espacio.WORLD_SIZE;
+            pos.y += Espacio.SIZE_ESPACIO;
         }
-        pos.x %= Espacio.WORLD_SIZE;
-        pos.y %= Espacio.WORLD_SIZE;
+        pos.x %= Espacio.SIZE_ESPACIO;
+        pos.y %= Espacio.SIZE_ESPACIO;
     }
 
     //Colisiones entre entidades
