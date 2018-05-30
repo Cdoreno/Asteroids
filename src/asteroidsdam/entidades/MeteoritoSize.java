@@ -2,78 +2,37 @@ package asteroidsdam.entidades;
 
 import java.awt.Polygon;
 
-/**
- * Stores information on the different sized asteroids.
- * @author Brendan Jones
- *
- */
 public enum MeteoritoSize {
 	
-	/**
-	 * Small Asteroids have a radius of 15, and are worth 100 points.
-	 */
-	Small(15.0, 100),
-			
-	/**
-	 * Medium asteroids have a radius of 25, and are worth 50 points.
-	 */
-	Medium(25.0, 50),
+//------------------------------Atributos-------------------------------------//
+    //Enumerables
+	Peque(15.0, 100),
+	Mediano(25.0, 50),
+	Grande(40.0, 20);
 	
-	/**
-	 * Large asteroids have a radius of 40, and are worth 20 points.
-	 */
-	Large(40.0, 20);
+	private static final int NUMERO_PUNTOS = 5;
+	public final Polygon poligono;
+	public final int puntosVida;
+	public final double radioColision;
 	
-	/**
-	 * The number of points on the Asteroid.
-	 */
-	private static final int NUMBER_OF_POINTS = 5;
-	
-	/**
-	 * The polygon for this type of Asteroid.
-	 */
-	public final Polygon polygon;
-	
-	/**
-	 * The radius of this type of Asteroid.
-	 */
-	public final double radius;
-	
-	/**
-	 * The number of points earned for killing this type of Asteroid.
-	 */
-	public final int killValue;
-	
-	/**
-	 * Creates a new type of Asteroid.
-	 * @param radius The radius.
-	 * @param value The kill value.
-	 */
-	private MeteoritoSize(double radius, int value) {
-		this.polygon = generatePolygon(radius);
-		this.radius = radius + 1.0;
-		this.killValue = value;
+//------------------------------Consturctor-----------------------------------//
+	private MeteoritoSize(double radio, int valor) {
+		this.poligono = generarPoligono(radio);
+		this.radioColision = radio + 1.0;
+		this.puntosVida = valor;
 	}
-	
-	/**
-	 * Generates a regular polygon of size radius.
-	 * @param radius The radius of the Polygon.
-	 * @return The generated Polygon.
-	 */
-	private static Polygon generatePolygon(double radius) {
-		//Create an array to store the coordinates.
-		int[] x = new int[NUMBER_OF_POINTS];
-		int[] y = new int[NUMBER_OF_POINTS];
-		
-		//Generate the points in the polygon.
-		double angle = (2 * Math.PI / NUMBER_OF_POINTS);
-		for(int i = 0; i < NUMBER_OF_POINTS; i++) {
-			x[i] = (int) (radius * Math.sin(i * angle));
-			y[i] = (int) (radius * Math.cos(i * angle));
+
+//----------------------------Métodos públicos--------------------------------//
+        //Generar poligono
+	private static Polygon generarPoligono(double radio) {
+		int[] x = new int[NUMERO_PUNTOS];
+		int[] y = new int[NUMERO_PUNTOS];
+		double angulo = (2 * Math.PI / NUMERO_PUNTOS);
+		for(int i = 0; i < NUMERO_PUNTOS; i++) {
+			x[i] = (int) (radio * Math.sin(i * angulo));
+			y[i] = (int) (radio * Math.cos(i * angulo));
 		}
-		
-		//Create a new polygon from the generated points and return it.
-		return new Polygon(x, y, NUMBER_OF_POINTS);
+		return new Polygon(x, y, NUMERO_PUNTOS); //====================>
 	}
 
 }
