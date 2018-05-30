@@ -32,7 +32,7 @@ public class Jugador extends Entidad {
     private static final double TIEMPO_FRENADO = 0.995;
     private static final double VEL_ROTACION = 0.052;
 
-//------------------------------Consturctor-----------------------------------//
+//------------------------------Constructor-----------------------------------//
     public Jugador() {
         super(new Vector(Espacio.SIZE_ESPACIO / 2.0, Espacio.SIZE_ESPACIO / 2.0), new Vector(0.0, 0.0), 10.0, 0);
         this.misDisparos = new ArrayList<>();
@@ -58,14 +58,14 @@ public class Jugador extends Entidad {
         }
 
         if (AVANCE_PULSADO) {
-            vel.add(new Vector(rotacion).scale(FUERZA_AVANCE));
-            if (vel.getLengthSquared() >= MAX_FUERZA_AVANCE * MAX_FUERZA_AVANCE) {
-                vel.normalize().scale(MAX_FUERZA_AVANCE);
+            vel.nuevo(new Vector(rotacion).size(FUERZA_AVANCE));
+            if (vel.getLongitud() >= MAX_FUERZA_AVANCE * MAX_FUERZA_AVANCE) {
+                vel.normalizar().size(MAX_FUERZA_AVANCE);
             }
         }
 
-        if (vel.getLengthSquared() != 0.0) {
-            vel.scale(TIEMPO_FRENADO);
+        if (vel.getLongitud() != 0.0) {
+            vel.size(TIEMPO_FRENADO);
         }
 
         Iterator<Disparo> iter = misDisparos.iterator();

@@ -24,7 +24,7 @@ public class Meteroito extends Entidad {
     private final double rotacionVel;
     private final MeteoritoSize size;
 
-//------------------------------Consturctor-----------------------------------//
+//------------------------------Constructor-----------------------------------//
     //Grande
     public Meteroito(Random random) {
         super(calcularPos(random), calcularVel(random), MeteoritoSize.Grande.radioColision, MeteoritoSize.Grande.puntosVida);
@@ -71,11 +71,11 @@ public class Meteroito extends Entidad {
 
     private static Vector calcularPos(Random random) {
         Vector vec = new Vector(Espacio.SIZE_ESPACIO / 2.0, Espacio.SIZE_ESPACIO / 2.0);
-        return vec.add(new Vector(random.nextDouble() * Math.PI * 2).scale(MIN_DISTANCIA + random.nextDouble() * VARIACION_DISTANCIA));
+        return vec.nuevo(new Vector(random.nextDouble() * Math.PI * 2).size(MIN_DISTANCIA + random.nextDouble() * VARIACION_DISTANCIA));
     }
 
     private static Vector calcularVel(Random random) {
-        return new Vector(random.nextDouble() * Math.PI * 2).scale(MIN_VEL + random.nextDouble() * VARIACION_VEL);
+        return new Vector(random.nextDouble() * Math.PI * 2).size(MIN_VEL + random.nextDouble() * VARIACION_VEL);
     }
 
 }

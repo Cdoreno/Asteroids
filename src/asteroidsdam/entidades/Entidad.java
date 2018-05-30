@@ -16,7 +16,7 @@ public abstract class Entidad {
     private boolean requiereEliminacion;
     private final int puntuacionAlMorir;
 
-//------------------------------Consturctor-----------------------------------//
+//------------------------------Constructor-----------------------------------//
     //Constructor, crea una entidad
     public Entidad(Vector pos, Vector vel, double radio, int puntuacionAlMorir) {
         this.pos = pos;
@@ -30,7 +30,7 @@ public abstract class Entidad {
 //----------------------------Métodos públicos--------------------------------//
     //Actualizar entidad en el espacio
     public void actualizar(Juego game) {
-        pos.add(vel);
+        pos.nuevo(vel);
         if (pos.x < 0.0f) {
             pos.x += Espacio.SIZE_ESPACIO;
         }
@@ -52,7 +52,7 @@ public abstract class Entidad {
     //Mirar si hubiese colisión entre entidades
     public boolean mirarSiColision(Entidad entidad) {
         double radio = entidad.getRadioColision() + getRadioColision();
-        return (pos.getDistanceToSquared(entidad.pos) < radio * radio);
+        return (pos.getDistancia(entidad.pos) < radio * radio);
     }
 
     //Dibujar entidad en el espacio

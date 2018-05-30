@@ -11,9 +11,9 @@ public class Disparo extends Entidad {
     private static final double VELOCIDAD = 6.75;
     private int VIDA_DISPARO;
 
-//------------------------------Consturctor-----------------------------------//
+//------------------------------Constructor-----------------------------------//
     public Disparo(Entidad nave, double angulo) {
-        super(new Vector(nave.pos), new Vector(angulo).scale(VELOCIDAD), 2.0, 0);
+        super(new Vector(nave.pos), new Vector(angulo).size(VELOCIDAD), 2.0, 0);
         this.VIDA_DISPARO = MAX_CICLOS;
     }
 

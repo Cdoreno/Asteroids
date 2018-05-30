@@ -15,7 +15,7 @@ public enum MeteoritoSize {
 	public final int puntosVida;
 	public final double radioColision;
 	
-//------------------------------Consturctor-----------------------------------//
+//------------------------------Constructor-----------------------------------//
 	private MeteoritoSize(double radio, int valor) {
 		this.poligono = generarPoligono(radio);
 		this.radioColision = radio + 1.0;
