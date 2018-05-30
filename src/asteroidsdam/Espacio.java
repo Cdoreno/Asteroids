@@ -8,169 +8,87 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.Iterator;
-
 import javax.swing.JPanel;
-
 import asteroidsdam.entidades.Entidad;
 
-/**
- * The {@code Espacio} is responsible for displaying the game to the user.
- * @author Brendan Jones
- *
- */
 public class Espacio extends JPanel {
 
-	/**
-	 * Serial Version Unique Identifier.
-	 */
-	private static final long serialVersionUID = -5107151667799471396L;
+//------------------------------Atributos-------------------------------------//
+    private static final Font FUENTE_SUBTITULO = new Font("Dialog", Font.PLAIN, 15);
+    private static final Font FUENTE_TITULO = new Font("Dialog", Font.PLAIN, 25);
+    private final Juego juego;
+    public static final int SIZE_ESPACIO = 550;
 
-	/**
-	 * The size of the world in pixels.
-	 */
-	public static final int WORLD_SIZE = 550;
-	
-	/**
-	 * The font used for the large text.
-	 */
-	private static final Font TITLE_FONT = new Font("Dialog", Font.PLAIN, 25);
-	
-	/**
-	 * The font used for the medium text.
-	 */
-	private static final Font SUBTITLE_FONT = new Font("Dialog", Font.PLAIN, 15);
+//------------------------------Constructor-----------------------------------//
+    public Espacio(Juego juego) {
+        this.juego = juego;
 
-	/**
-	 * The Juego instance.
-	 */
-	private Juego game;
-	
-	/**
-	 * Creates a new WorldPanel instance.
-	 * @param game The Juego instance.
-	 */
-	public Espacio(Juego game) {
-		this.game = game;
+        setPreferredSize(new Dimension(SIZE_ESPACIO, SIZE_ESPACIO));
+        setBackground(Color.BLACK);
+    }
 
-		//Set the window's size and background color.
-		setPreferredSize(new Dimension(WORLD_SIZE, WORLD_SIZE));
-		setBackground(Color.BLACK);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g); //Required, otherwise rendering gets messy.
-		
-		/*
-		 * Cast our Graphics object to a Graphics2D object to make use of the extra capabilities
-		 * such as anti-aliasing, and transformations.
-		 */
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		g2d.setColor(Color.WHITE); //Set the draw color to white.
-		
-		//Grab a reference to the current "identity" transformation, so we can reset for each object.
-		AffineTransform identity = g2d.getTransform();
-		
-		/*
-		 * Loop through each entity and draw it onto the window.
-		 */
-		Iterator<Entidad> iter = game.getEntities().iterator();
-		while(iter.hasNext()) {
-			Entidad entity = iter.next();
-			/*
-			 * We should only draw the player if it is not dead, so we need to
-			 * ensure that the entity can be rendered.
-			 */
-			if(entity != game.getPlayer() || game.canDrawPlayer()) {
-				Vector pos = entity.getPosition(); //Get the position of the entity.
-				
-				//Draw the entity at it's actual position, and reset the transformation.
-				drawEntity(g2d, entity, pos.x, pos.y);
-				g2d.setTransform(identity);
+//----------------------------Métodos públicos--------------------------------//
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(Color.WHITE);
+        AffineTransform identity = g2d.getTransform();
 
-				/*
-				 * Here we need to determine whether or not the entity is close enough
-				 * to the edge of the window to wrap around to the other side.
-				 * 
-				 * The conditional statements might look confusing, but they're
-				 * equivalent to:
-				 * 
-				 * double x = pos.x;
-				 * if(pos.x < radius) {
-				 *     x = pos.x + WORLD_SIZE;
-				 * } else if(pos.x > WORLD_SIZE - radius) {
-				 *     x = pos.x - WORLD_SIZE;
-				 * }
-				 * 
-				 */
-				double radius = entity.getCollisionRadius();
-				double x = (pos.x < radius) ? pos.x + WORLD_SIZE
-						: (pos.x > WORLD_SIZE - radius) ? pos.x - WORLD_SIZE : pos.x;
-				double y = (pos.y < radius) ? pos.y + WORLD_SIZE
-						: (pos.y > WORLD_SIZE - radius) ? pos.y - WORLD_SIZE : pos.y;
-				
-				//Draw the entity at it's wrapped position, and reset the transformation.
-				if(x != pos.x || y != pos.y) {
-					drawEntity(g2d, entity, x, y);
-					g2d.setTransform(identity);
-				}
-			}	
-		}
-		
-		//Draw the score string in the top left corner if we are still playing.
-		if(!game.isGameOver()) {
-			g.drawString("Score: " + game.getScore(), 10, 15);
-		}
-		
-		//Draw some overlay text depending on the game state.
-		if(game.isGameOver()) {
-			drawTextCentered("Game Over", TITLE_FONT, g2d, -25);
-			drawTextCentered("Final Score: " + game.getScore(), SUBTITLE_FONT, g2d, 10);
-		} else if(game.isPaused()) {
-			drawTextCentered("Paused", TITLE_FONT, g2d, -25);
-		} else if(game.isShowingLevel()) {
-			drawTextCentered("Level: " + game.getLevel(), TITLE_FONT, g2d, -25);
-		}
-		
-		//Draw a ship for each life the player has remaining.
-		g2d.translate(15, 30);
-		g2d.scale(0.85, 0.85);
-		for(int i = 0; i < game.getLives(); i++) {
-			g2d.drawLine(-8, 10, 0, -10);
-			g2d.drawLine(8, 10, 0, -10);
-			g2d.drawLine(-6, 6, 6, 6);
-			g2d.translate(30, 0);
-		}
-	}
-	
-	/**
-	 * Draws text onto the center of the window.
-	 * @param text The text to draw.
-	 * @param font The font to draw in.
-	 * @param g The graphics object to draw to.
-	 * @param y The y offset.
-	 */
-	private void drawTextCentered(String text, Font font, Graphics2D g, int y) {
-		g.setFont(font);
-		g.drawString(text, WORLD_SIZE / 2 - g.getFontMetrics().stringWidth(text) / 2, WORLD_SIZE / 2 + y);
-	}
-	
-	/**
-	 * Draws an entity onto the window.
-	 * @param g2d The graphics object to draw to.
-	 * @param entity The entity to draw.
-	 * @param x The x coordinate to draw the entity at.
-	 * @param y The y coordinate to draw the entity at.
-	 */
-	private void drawEntity(Graphics2D g2d, Entidad entity, double x, double y) {
-		g2d.translate(x, y);
-		double rotation = entity.getRotation();
-		if(rotation != 0.0f) {
-			g2d.rotate(entity.getRotation());
-		}
-		entity.draw(g2d, game);
-	}
+        Iterator<Entidad> bucle = juego.getEntities().iterator();
+        while (bucle.hasNext()) {
+            Entidad entidad = bucle.next();
+            if (entidad != juego.getPlayer() || juego.canDrawPlayer()) {
+                Vector pos = entidad.getPos();
+                dibujarEntidad(g2d, entidad, pos.x, pos.y);
+                g2d.setTransform(identity);
+                double radio = entidad.getRadioColision();
+                double x = (pos.x < radio) ? pos.x + SIZE_ESPACIO
+                        : (pos.x > SIZE_ESPACIO - radio) ? pos.x - SIZE_ESPACIO : pos.x;
+                double y = (pos.y < radio) ? pos.y + SIZE_ESPACIO
+                        : (pos.y > SIZE_ESPACIO - radio) ? pos.y - SIZE_ESPACIO : pos.y;
+                if (x != pos.x || y != pos.y) {
+                    dibujarEntidad(g2d, entidad, x, y);
+                    g2d.setTransform(identity);
+                }
+            }
+        }
+        if (!juego.isGameOver()) {
+            g.drawString("Score: " + juego.getScore(), 10, 15);
+        }
+        if (juego.isGameOver()) {
+            dibujarTextoCentrado("Game Over", FUENTE_TITULO, g2d, -25);
+            dibujarTextoCentrado("Final Score: " + juego.getScore(), FUENTE_SUBTITULO, g2d, 10);
+        } else if (juego.pausa()) {
+            dibujarTextoCentrado("Paused", FUENTE_TITULO, g2d, -25);
+        } else if (juego.isShowingLevel()) {
+            dibujarTextoCentrado("Level: " + juego.getLevel(), FUENTE_TITULO, g2d, -25);
+        }
+        
+        g2d.translate(15, 30);
+        g2d.scale(0.85, 0.85);
+        for (int i = 0; i < juego.getLives(); i++) {
+            g2d.drawLine(-8, 10, 0, -10);
+            g2d.drawLine(8, 10, 0, -10);
+            g2d.drawLine(-6, 6, 6, 6);
+            g2d.translate(30, 0);
+        }
+    }
+    
+//----------------------------Métodos privados--------------------------------//
+    private void dibujarEntidad(Graphics2D g2d, Entidad entity, double x, double y) {
+        g2d.translate(x, y);
+        double rotation = entity.getRotacion();
+        if (rotation != 0.0f) {
+            g2d.rotate(entity.getRotacion());
+        }
+        entity.pintarEnEspacio(g2d, juego);
+    }
+
+    private void dibujarTextoCentrado(String text, Font font, Graphics2D g, int y) {
+        g.setFont(font);
+        g.drawString(text, SIZE_ESPACIO / 2 - g.getFontMetrics().stringWidth(text) / 2, SIZE_ESPACIO / 2 + y);
+    }
 
 }
