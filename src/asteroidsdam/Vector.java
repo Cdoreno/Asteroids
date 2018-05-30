@@ -1,114 +1,64 @@
 package asteroidsdam;
 
-/**
- * Vector represents a 2-dimensional vector.
- * @author Brendan Jones
- */
 public class Vector {
-	
-	/**
-	 * The x value of the vector.
-	 */
-	public double x;
-	
-	/**
-	 * The y value of the vector.
-	 */
-	public double y;
-	
-	/**
-	 * Creates a new Vector from an angle. The length of this vector will be 1.
-	 * @param angle The angle.
-	 */
-	public Vector(double angle) {
-		this.x = Math.cos(angle);
-		this.y = Math.sin(angle);
-	}
-	
-	/**
-	 * Creates a new Vector with the desired values.
-	 * @param x The x value.
-	 * @param y The y value.
-	 */
-	public Vector(double x, double y) {
-		this.x = x;
-		this.y = y;
-	}
 
-	/**
-	 * Creates a new Vector and copies the components from the old.
-	 * @param vec The vector to copy.
-	 */
-	public Vector(Vector vec) {
-		this.x = vec.x;
-		this.y = vec.y;
-	}
-	
-	/**
-	 * Sets the components of this vector.
-	 * @param x The x component.
-	 * @param y The y component.
-	 * @return This vector for chaining.
-	 */
-	public Vector set(double x, double y) {
-		this.x = x;
-		this.y = y;
-		return this;
-	}
-	
-	/**
-	 * Adds the components of a vector to this one.
-	 * @param vec The vector to add.
-	 * @return This vector for chaining.
-	 */
-	public Vector add(Vector vec) {
-		this.x += vec.x;
-		this.y += vec.y;
-		return this;
-	}
-	
-	/**
-	 * Scales the components of this vector.
-	 * @param scalar The scalar value.
-	 * @return This vector for chaining.
-	 */
-	public Vector scale(double scalar) {
-		this.x *= scalar;
-		this.y *= scalar;
-		return this;
-	}
-	
-	/**
-	 * Normalizes this Vector (giving it a length of 1.0).
-	 * @return This vector for chaining.
-	 */
-	public Vector normalize() {
-		double length = getLengthSquared();
-		if(length != 0.0f && length != 1.0f) {
-			length = Math.sqrt(length);
-			this.x /= length;
-			this.y /= length;
-		}
-		return this;
-	}
-	
-	/**
-	 * Gets the squared length of this Vector.
-	 * @return The squared length.
-	 */
-	public double getLengthSquared() {
-		return (x * x + y * y);
-	}
+//------------------------------Atributos-------------------------------------//
+    public double x;
+    public double y;
 
-	/**
-	 * Gets the squared distance to another Vector.
-	 * @param vec The other vector.
-	 * @return The squared distance.
-	 */
-	public double getDistanceToSquared(Vector vec) {
-		double dx = this.x - vec.x;
-		double dy = this.y - vec.y;
-		return (dx * dx + dy * dy);
-	}
-	
+//------------------------------Constructor-----------------------------------//
+    public Vector(double angulo) {
+        this.x = Math.cos(angulo);
+        this.y = Math.sin(angulo);
+    }
+
+    public Vector(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Vector(Vector vec) {
+        this.x = vec.x;
+        this.y = vec.y;
+    }
+
+//----------------------------Métodos públicos--------------------------------//    
+    public Vector normalizar() {
+        double longitud = getLongitud();
+        if (longitud != 0.0f && longitud != 1.0f) {
+            longitud = Math.sqrt(longitud);
+            this.x /= longitud;
+            this.y /= longitud;
+        }
+        return this;
+    }
+
+    public Vector nuevo(Vector vec) {
+        this.x += vec.x;
+        this.y += vec.y;
+        return this;
+    }
+
+    public Vector size(double sized) {
+        this.x *= sized;
+        this.y *= sized;
+        return this;
+    }
+
+//------------------------------Gets & Sets-----------------------------------//
+    public double getDistancia(Vector vec) {
+        double dx = this.x - vec.x;
+        double dy = this.y - vec.y;
+        return (dx * dx + dy * dy);
+    }
+
+    public double getLongitud() {
+        return (x * x + y * y);
+    }
+
+    public Vector set(double x, double y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
 }
