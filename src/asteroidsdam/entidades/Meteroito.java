@@ -52,7 +52,7 @@ public class Meteroito extends Entidad {
 
     @Override
     public void colision(Juego juego, Entidad otraEntidad) {
-        if (otraEntidad.getClass() != Meteroito.class) {
+        if (otraEntidad.getClass() != Meteroito.class) { //Impedir que los meteoritos colisionen entre si
             if (size != MeteoritoSize.Peque) {
                 MeteoritoSize salidaSize = MeteoritoSize.values()[size.ordinal() - 1];
                 for (int i = 0; i < 2; i++) {
