@@ -84,7 +84,7 @@ public class Jugador extends Entidad {
 
                 Disparo bullet = new Disparo(this, rotacion);
                 misDisparos.add(bullet);
-                game.registerEntity(bullet);
+                game.guardarEntidad(bullet);
             }
             this.disparosConsecutivos++;
             if (disparosConsecutivos == MAX_DISPAROS_CONSECUTIVOS) {
