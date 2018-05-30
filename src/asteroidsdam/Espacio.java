@@ -39,7 +39,7 @@ public class Espacio extends JPanel {
         Iterator<Entidad> bucle = juego.getEntities().iterator();
         while (bucle.hasNext()) {
             Entidad entidad = bucle.next();
-            if (entidad != juego.getPlayer() || juego.canDrawPlayer()) {
+            if (entidad != juego.getPlayer() || juego.pintarJugador()) {
                 Vector pos = entidad.getPos();
                 dibujarEntidad(g2d, entidad, pos.x, pos.y);
                 g2d.setTransform(identity);
@@ -54,21 +54,21 @@ public class Espacio extends JPanel {
                 }
             }
         }
-        if (!juego.isGameOver()) {
-            g.drawString("Score: " + juego.getScore(), 10, 15);
+        if (!juego.juegoFinalizado()) {
+            g.drawString("Puntuación: " + juego.getPuntuacion(), 10, 15);
         }
-        if (juego.isGameOver()) {
-            dibujarTextoCentrado("Game Over", FUENTE_TITULO, g2d, -25);
-            dibujarTextoCentrado("Final Score: " + juego.getScore(), FUENTE_SUBTITULO, g2d, 10);
+        if (juego.juegoFinalizado()) {
+            dibujarTextoCentrado("Juego terminado", FUENTE_TITULO, g2d, -25);
+            dibujarTextoCentrado("Puntuación final: " + juego.getPuntuacion(), FUENTE_SUBTITULO, g2d, 10);
         } else if (juego.pausa()) {
-            dibujarTextoCentrado("Paused", FUENTE_TITULO, g2d, -25);
-        } else if (juego.isShowingLevel()) {
-            dibujarTextoCentrado("Level: " + juego.getLevel(), FUENTE_TITULO, g2d, -25);
+            dibujarTextoCentrado("Pausa", FUENTE_TITULO, g2d, -25);
+        } else if (juego.nivelMostrado()) {
+            dibujarTextoCentrado("Nivel: " + juego.getNivel(), FUENTE_TITULO, g2d, -25);
         }
         
         g2d.translate(15, 30);
         g2d.scale(0.85, 0.85);
-        for (int i = 0; i < juego.getLives(); i++) {
+        for (int i = 0; i < juego.getVidas(); i++) {
             g2d.drawLine(-8, 10, 0, -10);
             g2d.drawLine(8, 10, 0, -10);
             g2d.drawLine(-6, 6, 6, 6);
